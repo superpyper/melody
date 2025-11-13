@@ -1,19 +1,45 @@
 stages: # Определяем этапы пайплайна [1](https://javarush.com/quests/lectures/ru.javarush.java.spring.lecture.level15.lecture05)
 - build
 - test
-
- [1](https://javarush.com/quests/lectures/ru.javarush.java.spring.lecture.level15.lecture05)
-
-variables: MAVEN_OPTS: "-Dmaven.repo.local=/cache/.m2/repository" # Кэшируем локальные зависимости Maven [1](https://javarush.com/quests/lectures/ru.javarush.java.spring.lecture.level15.lecture05)
+variables: MAVEN_OPTS: "-Dmaven.repo.local=/cache/.m2/repository" 
 
 build: # Задача сборки
 stage: build
-image: maven:3.8.5-openjdk-11 # Используем Docker-образ с Maven и JDK
+image: maven:3.8.5-openjdk-11 
 script: - mvn clean compile # Команда для компиляции проекта
-artifacts: paths: - target/ # Передаём артефакты (напр., jar-файлы) на следующие этапы [1](https://javarush.com/quests/lectures/ru.javarush.java.spring.lecture.level15.lecture05)
+artifacts: paths: - target/ 
 
 test: # Задача тестирования
 stage: test
 image: maven:3.8.5-openjdk-11
 script: - mvn test # Запускаем тесты
-artifacts: reports: junit: target/surefire-reports/TEST-*.xml # Журналируем результаты тестирования
+artifacts: reports: junit: target/surefire-reports/TEST-*.xml 
+
+name: Parallel Workflow
+
+on: [push]
+
+jobs:
+  build-debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+      - name: Build Debug
+        run: dotnet build src/YourProject.csproj --configuration Debug
+
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+      - name: Build Release
+        run: dotnet build src/YourProject.csproj --configuration Release
