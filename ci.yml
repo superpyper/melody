@@ -86,3 +86,32 @@ jobs:
         uses: actions/checkout@v4
       - name: Run tests
         run: dotnet test src/YourProject.Tests.csproj
+
+        name: Parallel Workflow
+
+on: [push]
+
+jobs:
+  build-debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+      - name: Build Debug
+        run: dotnet build src/YourProject.csproj --configuration Debug
+
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+      - name: Build Release
+        run: dotnet build src/YourProject.csproj --configuration Release
