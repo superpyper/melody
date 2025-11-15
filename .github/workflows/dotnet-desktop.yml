@@ -1,7 +1,6 @@
 stages: # Определяем этапы пайплайна [1](https://javarush.com/quests/lectures/ru.javarush.java.spring.lecture.level15.lecture05)
 - build
 - test
-variables: MAVEN_OPTS: "-Dmaven.repo.local=/cache/.m2/repository" 
 
 build: # Задача сборки
 stage: build
