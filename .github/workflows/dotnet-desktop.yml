@@ -115,3 +115,11 @@ jobs:
           dotnet-version: '6.0.x'
       - name: Build Release
         run: dotnet build src/YourProject.csproj --configuration Release
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
